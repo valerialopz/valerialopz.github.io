@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Valeria Lopez — From Rainforest to Cosmos</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background:#0a0a0a; color:#e0e0e0; overflow-x:hidden; line-height:1.6;
+    }
+
+    /* Background stars */
+    #cosmic-canvas{ position:fixed; inset:0; z-index:-1; opacity:.3; }
+
+    /* Navigation */
+    nav{ position:fixed; top:0; width:100%; padding:20px 50px; background:rgba(10,10,10,.85); backdrop-filter: blur(10px); z-index:1000; transition:.3s; }
+    nav.scrolled{ padding:15px 50px; background:rgba(10,10,10,.95); }
+    .nav-links{ display:flex; justify-content:center; gap:30px; flex-wrap:wrap; }
+    .nav-links a{ color:#e0e0e0; text-decoration:none; font-size:14px; letter-spacing:.5px; position:relative; }
+    .nav-links a::after{ content:''; position:absolute; bottom:-5px; left:0; width:0; height:1px; background:linear-gradient(90deg,#ff6b6b,#4ecdc4); transition:width .3s; }
+    .nav-links a:hover::after{ width:100%; }
+
+    /* Hero */
+    .hero{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:80px 50px; position:relative; }
+    .hero-content{ max-width:900px; text-align:center; animation:fadeInUp 1s ease; }
+    @keyframes fadeInUp{ from{ opacity:0; transform:translateY(30px);} to{opacity:1; transform:translateY(0);} }
+    h1{ font-size:clamp(2.5rem,8vw,5rem); font-weight:300; margin-bottom:20px;
+        background:linear-gradient(135deg,#667eea 0%, #764ba2 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-2px; }
+    .tagline{ font-size:1.5rem; color:#a0a0a0; margin-bottom:40px; font-weight:300; }
+    .intro-text{ font-size:1.05rem; line-height:1.8; color:#c0c0c0; max-width:700px; margin:0 auto; }
+
+    /* Summary box */
+    .summary-box{ background:linear-gradient(135deg, rgba(102,126,234,.08), rgba(118,75,162,.08));
+      border:1px solid rgba(255,255,255,.18); border-radius:20px; padding:40px; margin:80px auto; max-width:1000px; }
+    .summary-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:40px; margin-top:30px; }
+    .summary-item h3{ color:#4ecdc4; font-size:1.15rem; margin-bottom:12px; }
+    .summary-item li{ margin-bottom:8px; color:#b0b0b0; font-size:.95rem; list-style:none; }
+
+    section{ padding:100px 50px; max-width:1200px; margin:0 auto; }
+    h2{ font-size:2.2rem; margin-bottom:24px; font-weight:300; position:relative; display:inline-block; }
+    h2 + p.section-lead{ color:#b0b0b0; margin-bottom:34px; }
+
+    h2::after{ content:''; position:absolute; bottom:-10px; left:0; width:60px; height:2px; background:linear-gradient(90deg,#ff6b6b,#4ecdc4); }
+
+    /* Dual thesis */
+    .thesis-container{ display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-top:30px; }
+    .thesis-card{ background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.1); border-radius:15px; padding:24px; }
+    .thesis-card h3{ color:#667eea; margin-bottom:8px; font-size:1.3rem; }
+    .thesis-excerpt{ background:rgba(0,0,0,.3); padding:16px; border-left:3px solid #4ecdc4; margin:16px 0; font-style:italic; color:#c0c0c0; border-radius:5px; }
+
+    /* Research grid */
+    .research-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(350px,1fr)); gap:30px; margin-top:20px; }
+    .research-card{ background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.1); border-radius:15px; padding:24px; transition:.25s; position:relative; }
+    .research-card::before{ content:''; position:absolute; top:0; left:0; width:100%; height:3px; background:linear-gradient(90deg,#667eea,#764ba2); transform:translateX(-100%); transition:transform .25s; }
+    .research-card:hover::before{ transform:translateX(0); }
+    .research-card:hover{ transform:translateY(-4px); background:rgba(255,255,255,.05); box-shadow:0 16px 36px rgba(0,0,0,.28); }
+    .research-card h3{ font-size:1.2rem; margin-bottom:10px; color:#f0f0f0; }
+    .research-card p{ color:#b0b0b0; margin-bottom:16px; }
+    .research-links{ display:flex; gap:12px; flex-wrap:wrap; }
+    .research-link{ color:#4ecdc4; text-decoration:none; font-size:.9rem; padding:5px 12px; border:1px solid #4ecdc4; border-radius:20px; transition:.2s; }
+    .research-link:hover{ background:#4ecdc4; color:#0a0a0a; }
+
+    /* Experience */
+    .experience-item{ background:rgba(255,255,255,.02); border-left:3px solid #667eea; padding:22px; margin-bottom:26px; border-radius:0 10px 10px 0; transition:.2s; }
+    .experience-item:hover{ background:rgba(255,255,255,.04); transform:translateX(4px); }
+    .experience-header{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; flex-wrap:wrap; gap:10px; }
+    .experience-title{ font-size:1.1rem; color:#f0f0f0; }
+    .experience-org{ color:#4ecdc4; margin-bottom:6px; }
+    .experience-date{ color:#888; font-size:.9rem; }
+    .experience-details{ color:#b0b0b0; }
+    .experience-details li{ margin-left:18px; margin-bottom:6px; }
+
+    /* Skills */
+    .skills-matrix{ display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:20px; margin-top:20px; }
+    .skill-category{ background:rgba(102,126,234,.06); border:1px solid rgba(102,126,234,.2); border-radius:10px; padding:18px; }
+    .skill-category h4{ color:#667eea; margin-bottom:10px; font-size:1.05rem; }
+    .skill-category li{ list-style:none; color:#c0c0c0; margin-bottom:5px; font-size:.92rem; }
+
+    /* Future */
+    .vision-section{ background:linear-gradient(135deg, rgba(255,107,107,.05), rgba(78,205,196,.05)); border-radius:20px; padding:40px; margin:60px 0; }
+    .research-interests{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:16px; }
+    .interest-area{ padding:18px; background:rgba(255,255,255,.03); border-radius:10px; }
+    .interest-area h4{ color:#ff6b6b; margin-bottom:8px; }
+
+    /* Timeline */
+    .timeline{ position:relative; padding:40px 0; }
+    .timeline::before{ content:''; position:absolute; left:50%; top:0; bottom:0; width:1px; background:rgba(255,255,255,.1); }
+    .timeline-item{ display:flex; margin-bottom:40px; align-items:center; opacity:0; animation:fadeIn 1s ease forwards; }
+    .timeline-item:nth-child(even){ flex-direction:row-reverse; }
+    .timeline-content{ width:45%; padding:24px; background:rgba(255,255,255,.03); border-radius:15px; border:1px solid rgba(255,255,255,.1); }
+    .timeline-dot{ width:18px; height:18px; background:linear-gradient(135deg,#667eea,#764ba2); border-radius:50%; margin:0 auto; z-index:1; }
+    @keyframes fadeIn{ to{ opacity:1; } }
+
+    /* Awards */
+    .awards-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:20px; margin-top:20px; }
+    .award-item{ padding:16px; background:rgba(102,126,234,.1); border-left:3px solid #667eea; border-radius:8px; transition:.2s; }
+    .award-item:hover{ background:rgba(102,126,234,.15); transform:translateX(4px); }
+
+    /* Publications */
+    .publications{ list-style:none; padding:0; }
+    .publications li{ margin-bottom:18px; padding-left:28px; position:relative; color:#c0c0c0; }
+    .publications li::before{ content:'→'; position:absolute; left:0; color:#667eea; }
+
+    /* Contact */
+    .contact{ text-align:center; padding:80px 50px; background:linear-gradient(135deg, rgba(102,126,234,.1), rgba(118,75,162,.1)); border-radius:20px; margin:40px auto; max-width:800px; }
+    .contact-links{ display:flex; justify-content:center; gap:26px; margin-top:24px; flex-wrap:wrap; }
+    .contact-link{ color:#e0e0e0; text-decoration:none; padding:12px 22px; border:1px solid rgba(255,255,255,.3); border-radius:25px; transition:.2s; }
+    .contact-link:hover{ background:rgba(255,255,255,.1); transform:translateY(-2px); }
+
+    .quote{ font-style:italic; font-size:1.2rem; text-align:center; margin:60px auto; max-width:800px; color:#888; position:relative; padding:30px; }
+    .quote::before, .quote::after{ content:'"'; font-size:3.4rem; color:rgba(102,126,234,.3); position:absolute; }
+    .quote::before{ top:-8px; left:0; } .quote::after{ bottom:-8px; right:0; }
+
+    .cv-button{ display:inline-block; margin-top:22px; padding:14px 26px; background:linear-gradient(135deg,#667eea,#764ba2); color:white; text-decoration:none; border-radius:30px; transition:.2s; font-weight:500; }
+    .cv-button:hover{ transform:translateY(-2px); box-shadow:0 10px 25px rgba(102,126,234,.3); }
+
+    /* Constellation + AGN canvases */
+    .viz-grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:22px; }
+    .viz-card{ background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:16px; }
+    .viz-card h4{ color:#4ecdc4; margin-bottom:8px; }
+    canvas.viz{ width:100%; height:360px; background: radial-gradient(ellipse at center, rgba(255,255,255,.05) 0%, rgba(0,0,0,0) 60%); border-radius:12px; display:block; }
+
+    /* Mobile */
+    @media (max-width: 768px){
+      nav{ padding:15px 20px; }
+      .nav-links{ gap:15px; }
+      section{ padding:60px 20px; }
+      .summary-grid{ grid-template-columns:1fr; }
+      .thesis-container{ grid-template-columns:1fr; }
+      .research-grid{ grid-template-columns:1fr; }
+      .research-interests{ grid-template-columns:1fr; }
+      .skills-matrix{ grid-template-columns:1fr; }
+      .timeline::before{ left:20px; }
+      .timeline-item{ flex-direction:column !important; }
+      .timeline-content{ width:calc(100% - 50px); margin-left:50px; }
+      .viz-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="cosmic-canvas"></canvas>
+
+  <nav id="navbar">
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#thesis">Thesis Work</a>
+      <a href="#viz">Las Siete Cabritas + AGN</a>
+      <a href="#research">Research</a>
+      <a href="#experience">Experience</a>
+      <a href="#future">Where I'm headed</a>
+      <a href="#publications">Publications</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-content">
+      <h1>Valeria Lopez</h1>
+      <p class="tagline">Tracing feedback loops from Honduras to the cosmos</p>
+      <p class="intro-text">
+        Before I learned to model supermassive black holes, I was naming constellations with my family under rural Honduran skies near Blanca Jeannette Kawas National Park in San Alejo, Tela. We called the Pleiades “Las Siete Cabritas.”
+      </p>
+    </div>
+  </section>
+
+  <!-- Summary -->
+  <section id="about">
+    <div class="summary-box">
+      <h2 style="text-align:center; margin-bottom:18px;">At a glance</h2>
+      <p style="text-align:center; color:#b0b0b0; margin-bottom:24px;">
+        Physics and WGSS dual thesis student connecting computational astrophysics with human-centered design
+      </p>
+      <div class="summary-grid">
+        <div class="summary-item">
+          <h3>Technical expertise</h3>
+          <ul>
+            <li>DESI spectroscopy and AGN diagnostics</li>
+            <li>Python pipeline development</li>
+            <li>Signal processing and error analysis</li>
+            <li>Telemetry systems</li>
+            <li>Observing and instrumentation</li>
+          </ul>
+        </div>
+        <div class="summary-item">
+          <h3>Research areas</h3>
+          <ul>
+            <li>Reionization and LyC emitters</li>
+            <li>AGN feedback</li>
+            <li>Black hole–galaxy coevolution</li>
+            <li>Space habitats and usability</li>
+            <li>Science, policy, and equity</li>
+          </ul>
+        </div>
+        <div class="summary-item">
+          <h3>Current work</h3>
+          <ul>
+            <li>Brooke Owens Fellow</li>
+            <li>First-author conference proceedings</li>
+            <li>Built a radio astronomy program in Central America</li>
+            <li>Bilingual outreach</li>
+            <li>English, Spanish, and scientific computing</li>
+          </ul>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <a href="#" class="cv-button">Download full CV (PDF)</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dual thesis -->
+  <section id="thesis">
+    <h2>Dual thesis student</h2>
+    <p class="section-lead">
+      I study feedback in astrophysical and built systems. In galaxies, I trace how active nuclei change gas and light. In space design, I focus on routines that make orbit livable. These lines of work share a method: start from the real behaviors of the system and write plainly about what it takes to keep it going.
+    </p>
+
+    <div class="thesis-container">
+      <div class="thesis-card">
+        <h3>Astrophysics thesis</h3>
+        <h4 style="color:#c0c0c0; margin-bottom:10px;">Mid-infrared forbidden lines and ionizing spectra in low-metallicity LyC emitters</h4>
+        <p style="color:#b0b0b0;">
+          <strong>Advisor:</strong> Dr. Anne Jaskot
+        </p>
+        <div class="thesis-excerpt">
+          “Ancient photons cross large distances to reach us. What we see depends on how freely light can move through gas.”
+        </div>
+        <p style="color:#b0b0b0;">
+          I use JWST spectroscopy of nearby low-metallicity galaxies to study line ratios that carry information about the hardness of ionizing radiation. The goal is to connect spectra to escape of ionizing light.
+        </p>
+      </div>
+
+      <div class="thesis-card">
+        <h3>WGSS thesis</h3>
+        <h4 style="color:#c0c0c0; margin-bottom:10px;">Feminist infrastructures of breath, waste, and feeling in orbital design</h4>
+        <p style="color:#b0b0b0;">
+          <strong>Advisor:</strong> Dr. Ezra Feldman
+        </p>
+        <div class="thesis-excerpt">
+          “Airflow is not background. It is made by fans, filters, and people who tune them.”
+        </div>
+        <p style="color:#b0b0b0;">
+          I write about maintenance and care in closed environments. I look at how procedures, interfaces, and habits keep bodies comfortable and safe in orbit.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Constellation + AGN visualizations -->
+  <section id="viz">
+    <h2>Las Siete Cabritas and an AGN</h2>
+    <p class="section-lead">
+      Click each Pleiades star to turn it into a tiny goat. The AGN shows a black hole with a warm orange accretion flow like the first EHT image.
+    </p>
+    <div class="viz-grid">
+      <div class="viz-card">
+        <h4>Las Siete Cabritas (Pleiades)</h4>
+        <p style="color:#b0b0b0; margin-bottom:8px;">
+          Orientation matches common sky charts. Toggle “Flip” if your reference uses the mirrored view.
+        </p>
+        <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
+          <label style="font-size:.9rem; color:#c0c0c0;"><input type="checkbox" id="flipPleiades" /> Flip</label>
+          <button id="resetGoats" style="padding:6px 10px; border-radius:8px; border:1px solid #444; background:#111; color:#ddd; cursor:pointer;">Reset</button>
+        </div>
+        <canvas id="pleiades-canvas" class="viz" width="600" height="360"></canvas>
+      </div>
+
+      <div class="viz-card">
+        <h4>Active Galactic Nucleus</h4>
+        <p style="color:#b0b0b0; margin-bottom:8px;">
+          Black center, thin photon ring, and an orange accretion flow with subtle motion and beaming.
+        </p>
+        <canvas id="agn-canvas" class="viz" width="600" height="360"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Research -->
+  <section id="research">
+    <h2>Current research</h2>
+    <p class="section-lead">
+      I work with galaxy spectra, data systems for modular space structures, and public-facing writing about astronomy and place.
+    </p>
+
+    <div class="research-grid">
+      <div class="research-card">
+        <h3>Hidden black holes in DESI</h3>
+        <p>
+          I analyze DESI spectra and use [O&nbsp;III] λ5008 and [Ne&nbsp;V] λ3426 to find active nuclei, including obscured cases. I use model fits and tests to separate signal from artifacts and then connect line properties to star-forming histories.
+        </p>
+        <div class="research-links">
+          <a href="https://ui.adsabs.harvard.edu/abs/2025AAS...24535509L/abstract" target="_blank" class="research-link">AAS 2025</a>
+          <a href="#" class="research-link">Preprint</a>
+        </div>
+      </div>
+
+      <div class="research-card">
+        <h3>Self-assembling space structures</h3>
+        <p>
+          At Aurelia Institute I wrote Python tools to process many telemetry streams from TESSERAE modules. The code aligns sensors, finds docking events, and summarizes system behavior for design decisions.
+        </p>
+        <div class="research-links">
+          <a href="https://drive.google.com/file/d/15XKWieIpFxSj1lLWEHOvdJejL5IDRhFg/view" target="_blank" class="research-link">KNAC 2025</a>
+          <a href="https://www.media.mit.edu/projects/tesserae/overview/" target="_blank" class="research-link">Project</a>
+        </div>
+      </div>
+
+      <div class="research-card">
+        <h3>Radio astronomy curriculum</h3>
+        <p>
+          With a small grant I set up a radio astronomy program, trained students, and connected a university to NRAO mentors. The aim was simple: build local capacity so students can keep going after a workshop ends.
+        </p>
+        <div class="research-links">
+          <a href="https://ui.adsabs.harvard.edu/abs/2024AAS...24317302L/abstract" target="_blank" class="research-link">AAS abstract</a>
+        </div>
+      </div>
+
+      <div class="research-card">
+        <h3>Telescope siting and community</h3>
+        <p>
+          I study how sites are chosen and what that means for nearby communities. I read archives, compare cases, and write about process and consent.
+        </p>
+        <div class="research-links">
+          <a href="https://ui.adsabs.harvard.edu/abs/2024AAS...24316304L/abstract" target="_blank" class="research-link">History</a>
+          <a href="https://doi.org/10.38105/spr.dikhouy3qw" target="_blank" class="research-link">Policy review</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience">
+    <h2>Experience</h2>
+
+    <h3 style="color:#667eea; margin-bottom:16px;">Research</h3>
+
+    <div class="experience-item">
+      <div class="experience-header">
+        <div>
+          <div class="experience-title">Research Assistant</div>
+          <div class="experience-org">Minerva Observatory, University of Southern Queensland</div>
+        </div>
+        <div class="experience-date">Jul 2025 – Aug 2025</div>
+      </div>
+      <ul class="experience-details">
+        <li>Built web tools for real-time telescope pointing and spectra</li>
+        <li>Contributed to PASA manuscript “Hot Jupiter – Cold Jupiter: A Complex Sibling Relation”</li>
+      </ul>
+    </div>
+
+    <div class="experience-item">
+      <div class="experience-header">
+        <div>
+          <div class="experience-title">Software Engineer</div>
+          <div class="experience-org">Aurelia Institute</div>
+        </div>
+        <div class="experience-date">Jun 2025 – Aug 2025</div>
+      </div>
+      <ul class="experience-details">
+        <li>Wrote Python telemetry pipelines for TESSERAE modules</li>
+        <li>Found and fixed sync issues across microcontrollers</li>
+        <li>Brooke Owens Fellow</li>
+      </ul>
+    </div>
+
+    <div class="experience-item">
+      <div class="experience-header">
+        <div>
+          <div class="experience-title">Research Assistant</div>
+          <div class="experience-org">Princeton University, Astrophysical Sciences</div>
+        </div>
+        <div class="experience-date">May 2024 – Dec 2024</div>
+      </div>
+      <ul class="experience-details">
+        <li>Analyzed DESI spectra with double-Gaussian line fits</li>
+        <li>Modeled [O&nbsp;III] and [Ne&nbsp;V] to flag AGN</li>
+        <li>Built tests to reject artifacts at scale</li>
+      </ul>
+    </div>
+
+    <div class="experience-item">
+      <div class="experience-header">
+        <div>
+          <div class="experience-title">NAC Summer Student</div>
+          <div class="experience-org">National Radio Astronomy Observatory</div>
+        </div>
+        <div class="experience-date">May 2023 – Aug 2023</div>
+      </div>
+      <ul class="experience-details">
+        <li>Compared telescope siting practices for ngVLA planning</li>
+        <li>Worked with mentors on process guidance</li>
+      </ul>
+    </div>
+
+    <div class="experience-item">
+      <div class="experience-header">
+        <div>
+          <div class="experience-title">Research Assistant</div>
+          <div class="experience-org">DarkSide Collaboration</div>
+        </div>
+        <div class="experience-date">Nov 2022 – May 2023</div>
+      </div>
+      <ul class="experience-details">
+        <li>Characterized SiPM response for liquid-argon detector</li>
+        <li>Implemented LabVIEW DAQ for scintillation studies</li>
+      </ul>
+    </div>
+
+    <h3 style="color:#667eea; margin:20px 0 12px;">Teaching and outreach</h3>
+
+    <div class="experience-item">
+      <div class="experience-header">
+        <div>
+          <div class="experience-title">Teaching Assistant</div>
+          <div class="experience-org">Williams College Physics and Astronomy</div>
+        </div>
+        <div class="experience-date">Aug 2023 – Present</div>
+      </div>
+      <ul class="experience-details">
+        <li>Led problem sessions in mechanics</li>
+        <li>Trained students on telescope use and Python reductions</li>
+        <li>Helped run public observing nights and eclipse events</li>
+      </ul>
+    </div>
+
+    <div class="experience-item">
+      <div class="experience-header">
+        <div>
+          <div class="experience-title">Planetarium Presenter</div>
+          <div class="experience-org">Milham Planetarium, Williams College</div>
+        </div>
+        <div class="experience-date">Feb 2024 – Present</div>
+      </div>
+      <ul class="experience-details">
+        <li>Operated Zeiss projector for weekly shows</li>
+        <li>Prepared bilingual content</li>
+      </ul>
+    </div>
+
+    <div class="experience-item">
+      <div class="experience-header">
+        <div>
+          <div class="experience-title">Student Worker</div>
+          <div class="experience-org">Williams Makerspace</div>
+        </div>
+        <div class="experience-date">Sep 2022 – May 2025</div>
+      </div>
+      <ul class="experience-details">
+        <li>Supported CAD/CNC/3D printing workshops</li>
+        <li>Prototyped with Arduino, Raspberry&nbsp;Pi, and laser tools</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section>
+    <h2>Technical skills</h2>
+    <div class="skills-matrix">
+      <div class="skill-category">
+        <h4>Programming</h4>
+        <ul>
+          <li>Python (NumPy, Pandas, Matplotlib, Astropy)</li>
+          <li>JavaScript/WebGL</li>
+          <li>MATLAB</li>
+          <li>LabVIEW</li>
+          <li>Git/GitHub</li>
+        </ul>
+      </div>
+      <div class="skill-category">
+        <h4>Data analysis</h4>
+        <ul>
+          <li>Spectral fitting and modeling</li>
+          <li>Double-Gaussian decomposition</li>
+          <li>Inverse-variance weighting</li>
+          <li>Signal processing</li>
+          <li>Error analysis and propagation</li>
+        </ul>
+      </div>
+      <div class="skill-category">
+        <h4>Astronomy</h4>
+        <ul>
+          <li>DESI spectroscopy</li>
+          <li>AGN diagnostics ([O&nbsp;III], [Ne&nbsp;V])</li>
+          <li>Telescope operations</li>
+          <li>CCD imaging and calibration</li>
+          <li>Photometry and astrometry</li>
+        </ul>
+      </div>
+      <div class="skill-category">
+        <h4>Hardware</h4>
+        <ul>
+          <li>SiPMs</li>
+          <li>Arduino/Raspberry&nbsp;Pi</li>
+          <li>CNC routing</li>
+          <li>3D printing</li>
+          <li>Digital fabrication</li>
+        </ul>
+      </div>
+      <div class="skill-category">
+        <h4>Design tools</h4>
+        <ul>
+          <li>SolidWorks</li>
+          <li>Fusion 360</li>
+          <li>AutoDock</li>
+          <li>PyMOL</li>
+          <li>Photoshop</li>
+        </ul>
+      </div>
+      <div class="skill-category">
+        <h4>Languages</h4>
+        <ul>
+          <li>English (fluent)</li>
+          <li>Spanish (native)</li>
+          <li>Scientific writing</li>
+          <li>Public communication</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Future -->
+  <section id="future" class="vision-section">
+    <div class="vision-content">
+      <h2>Where I'm headed</h2>
+      <p style="color:#c0c0c0; margin-bottom:20px;">
+        I am applying to PhD programs and to data roles that work with scientific or engineering data. I care about clear methods and good documentation. I like projects that join careful analysis with practical use.
+      </p>
+      <div class="research-interests">
+        <div class="interest-area">
+          <h4>Computational astrophysics</h4>
+          <p style="color:#b0b0b0;">Large-sample spectra, AGN identification, and feedback models.</p>
+        </div>
+        <div class="interest-area">
+          <h4>Space systems</h4>
+          <p style="color:#b0b0b0;">Telemetry, fault-aware routines, and usable tools for teams.</p>
+        </div>
+        <div class="interest-area">
+          <h4>Data work</h4>
+          <p style="color:#b0b0b0;">Pattern finding, real-time processing, and clear reports.</p>
+        </div>
+        <div class="interest-area">
+          <h4>Science and society</h4>
+          <p style="color:#b0b0b0;">Paths into science and how decisions land in real places.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Journey -->
+  <section id="journey">
+    <h2>The journey so far</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>Honduran rainforest roots</h3>
+          <p>
+            I grew up in a rural area near Blanca Jeannette Kawas National Park in San Alejo, Tela. Dark skies were close. On Fridays we would sit outside and name the stars together.
+          </p>
+        </div>
+        <div class="timeline-dot"></div>
+        <div style="width:45%;"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div style="width:45%;"></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h3>Physics Olympiad and the pandemic</h3>
+          <p>
+            Three bronze medals for Honduras. I kept going through COVID-19 and two hurricanes while applying to college abroad.
+          </p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>Williams College</h3>
+          <p>
+            PWIs were not built with students like me in mind. I started the Wavelength Club to make a place for minoritized physics students.
+          </p>
+        </div>
+        <div class="timeline-dot"></div>
+        <div style="width:45%;"></div>
+      </div>
+
+      <div class="timeline-item">
+        <div style="width:45%;"></div>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h3>Princeton and NRAO</h3>
+          <p>
+            I worked on AGN in DESI spectra and studied how big facilities choose sites. I try to keep technical work and public impact in the same frame.
+          </p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-content">
+          <h3>Brooke Owens Fellow</h3>
+          <p>
+            At Aurelia I helped build tools for modular space structures and contributed to team documentation and testing routines.
+          </p>
+        </div>
+        <div class="timeline-dot"></div>
+        <div style="width:45%;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Publications -->
+  <section id="publications">
+    <h2>Publications and talks</h2>
+    <ul class="publications">
+      <li>
+        <strong>First author:</strong> “Characterizing AGN Emission Line Profiles through DESI Spectroscopy” —
+        <a href="https://ui.adsabs.harvard.edu/abs/2025AAS...24535509L/abstract" target="_blank" style="color:#4ecdc4;">AAS 2025</a>
+      </li>
+      <li>
+        <strong>First author:</strong> “Automated Telemetry Analysis for Self-Assembling Space Architecture” —
+        <a href="https://drive.google.com/file/d/15XKWieIpFxSj1lLWEHOvdJejL5IDRhFg/view" target="_blank" style="color:#4ecdc4;">KNAC 2025</a>
+      </li>
+      <li>
+        <strong>Policy analysis:</strong> “Postcolonial Techno-Futurism: Telescopes on Sacred Lands” —
+        <a href="https://doi.org/10.38105/spr.dikhouy3qw" target="_blank" style="color:#4ecdc4;">MIT Science Policy Review</a>
+      </li>
+      <li>
+        <strong>First author:</strong> “Conquest and the Cosmos: Traces of Colonialism in Ground-Based Astronomy” —
+        <a href="https://ui.adsabs.harvard.edu/abs/2024AAS...24316304L/abstract" target="_blank" style="color:#4ecdc4;">AAS 243, HAD Session</a>
+      </li>
+      <li>
+        <strong>In preparation:</strong> “Hot Jupiter – Cold Jupiter: A Complex Sibling Relation” — PASA manuscript
+      </li>
+      <li>
+        <strong>Conference talk:</strong> “Spectral Signatures and Galactic Outflows” — KNAC 2024
+      </li>
+    </ul>
+  </section>
+
+  <!-- Awards -->
+  <section>
+    <h2>Recognition</h2>
+    <div class="awards-grid">
+      <div class="award-item">
+        <strong>Brooke Owens Fellow</strong><br/>
+        Undergraduate fellowship in aerospace with mentorship, cohort learning, and a summer placement.
+      </div>
+      <div class="award-item">
+        <strong>Gordon Davis Fellow</strong><br/>
+        Williams College fellowship that funds projects with social impact. Supported my work on “Speculative Sleep Systems” for space habitats.
+      </div>
+      <div class="award-item">
+        <strong>Gaudino Fellow</strong><br/>
+        Williams College’s experiential learning fellowship. I wrote children’s astronomy books during a winter study in the Sahara and shared them in local schools.
+      </div>
+      <div class="award-item">
+        <strong>NAC Scholar</strong><br/>
+        National Astronomy Consortium, run with NRAO. Research placement plus long-term mentorship for students underrepresented in astronomy.
+      </div>
+      <div class="award-item">
+        <strong>Class of 2006 and 2009 Grant</strong><br/>
+        Project support that helped launch a radio astronomy program for students.
+      </div>
+      <div class="award-item">
+        <strong>Physics Olympiad</strong><br/>
+        Three bronze medals for Honduras.
+      </div>
+      <div class="award-item">
+        <strong>TechGirls Alum</strong><br/>
+        U.S. Department of State program focused on STEM skills and leadership.
+      </div>
+      <div class="award-item">
+        <strong>Jeffrey Family Scholar</strong><br/>
+        Williams College endowed award.
+      </div>
+    </div>
+  </section>
+
+  <div class="quote">
+    From Las Siete Cabritas to forbidden lines — still finding patterns in the dark.
+  </div>
+
+  <!-- Contact -->
+  <section id="contact" class="contact">
+    <h2>Contact</h2>
+    <p style="color:#b0b0b0;">Email is best. I am happy to share materials or code.</p>
+    <div class="contact-links">
+      <a href="mailto:avm5@williams.edu" class="contact-link">Email</a>
+      <a href="https://linkedin.com/in/valeria-lopez-858731210" target="_blank" class="contact-link">LinkedIn</a>
+      <a href="https://ui.adsabs.harvard.edu/search/q=author%3A%22Lopez%20Menjivar%2C%20Alessandra%22" target="_blank" class="contact-link">ADS</a>
+      <a href="https://github.com/yourusername" target="_blank" class="contact-link">GitHub</a>
+    </div>
+  </section>
+
+  <script>
+    /* Navbar shrink */
+    window.addEventListener('scroll', () => {
+      const n = document.getElementById('navbar');
+      if (window.scrollY > 50) n.classList.add('scrolled'); else n.classList.remove('scrolled');
+    });
+
+    /* Smooth anchors */
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        const tgt = document.querySelector(a.getAttribute('href'));
+        if(!tgt) return;
+        e.preventDefault();
+        tgt.scrollIntoView({behavior:'smooth', block:'start'});
+      });
+    });
+
+    /* Background stars */
+    const bg = document.getElementById('cosmic-canvas');
+    const bctx = bg.getContext('2d');
+    function resizeBG(){ bg.width = innerWidth; bg.height = innerHeight; }
+    resizeBG(); addEventListener('resize', resizeBG);
+    const stars = Array.from({length:220}, ()=>({
+      x: Math.random()*bg.width,
+      y: Math.random()*bg.height,
+      r: Math.random()*1.6 + 0.2,
+      s: Math.random()*0.5 + 0.1
+    }));
+    function animBG(){
+      bctx.clearRect(0,0,bg.width,bg.height);
+      for(const st of stars){
+        bctx.fillStyle = 'rgba(255,255,255,0.9)';
+        bctx.beginPath(); bctx.arc(st.x, st.y, st.r, 0, Math.PI*2); bctx.fill();
+        st.y -= st.s; if(st.y < -2){ st.y = bg.height+2; st.x = Math.random()*bg.width; }
+      }
+      requestAnimationFrame(animBG);
+    }
+    animBG();
+
+    /* Intersection fade-in */
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.style.animation='fadeInUp .8s ease forwards'; }});
+    }, {threshold:0.1, rootMargin:'0px 0px -50px 0px'});
+    document.querySelectorAll('.research-card, .timeline-item, .award-item, .experience-item').forEach(el=>obs.observe(el));
+
+    /* -------- Las Siete Cabritas: each star becomes a goat on click -------- */
+    const pc = document.getElementById('pleiades-canvas');
+    const pctx = pc.getContext('2d');
+
+    // Approximate Pleiades (normalized); oriented to match common charts
+    // (Alcyone, Maia, Merope, Electra, Taygeta, Pleione, Atlas)
+    const baseStars = [
+      {name:'Alcyone', x:0.50, y:0.48},
+      {name:'Maia',    x:0.38, y:0.36},
+      {name:'Merope',  x:0.62, y:0.60},
+      {name:'Electra', x:0.46, y:0.30},
+      {name:'Taygeta', x:0.33, y:0.26},
+      {name:'Pleione', x:0.55, y:0.40},
+      {name:'Atlas',   x:0.58, y:0.34}
+    ];
+    let starsState = baseStars.map(s=>({ ...s, goat:false }));
+
+    function drawStar(x,y,r){
+      pctx.save();
+      const g = pctx.createRadialGradient(x,y,0, x,y,r);
+      g.addColorStop(0,'rgba(255,255,255,0.95)');
+      g.addColorStop(1,'rgba(255,255,255,0.1)');
+      pctx.fillStyle = g;
+      pctx.beginPath(); pctx.arc(x,y,r,0,Math.PI*2); pctx.fill();
+      pctx.restore();
+    }
+
+    // Simple goat silhouette (tiny): body, head, legs, horns
+    function drawGoat(cx, cy, scale=1){
+      pctx.save();
+      pctx.translate(cx, cy);
+      pctx.scale(scale, scale);
+      pctx.fillStyle = '#e5e5e5';
+      pctx.strokeStyle = '#cfcfcf';
+      pctx.lineWidth = 1.2;
+
+      // Body
+      pctx.beginPath();
+      pctx.ellipse(0, 0, 9, 6, 0, 0, Math.PI*2);
+      pctx.fill();
+
+      // Head
+      pctx.beginPath();
+      pctx.ellipse(11, -4, 4, 3, 0, 0, Math.PI*2);
+      pctx.fill();
+
+      // Horns
+      pctx.beginPath();
+      pctx.moveTo(12, -7);
+      pctx.lineTo(15, -12);
+      pctx.lineTo(13, -7);
+      pctx.closePath(); pctx.fill();
+
+      pctx.beginPath();
+      pctx.moveTo(10, -7);
+      pctx.lineTo(7, -12);
+      pctx.lineTo(9, -7);
+      pctx.closePath(); pctx.fill();
+
+      // Tail
+      pctx.beginPath();
+      pctx.moveTo(-10, -1);
+      pctx.lineTo(-14, -5);
+      pctx.stroke();
+
+      // Legs
+      pctx.beginPath();
+      pctx.moveTo(-4, 6); pctx.lineTo(-4, 11);
+      pctx.moveTo(0, 6);  pctx.lineTo(0, 11);
+      pctx.moveTo(4, 6);  pctx.lineTo(4, 11);
+      pctx.moveTo(8, 6);  pctx.lineTo(8, 11);
+      pctx.stroke();
+
+      pctx.restore();
+    }
+
+    function renderPleiades(){
+      pctx.clearRect(0,0,pc.width,pc.height);
+      // background sprinkle
+      pctx.fillStyle = 'rgba(255,255,255,0.05)';
+      for(let i=0;i<80;i++){
+        const x = Math.random()*pc.width, y = Math.random()*pc.height, r = Math.random()*1.2;
+        pctx.beginPath(); pctx.arc(x,y,r,0,Math.PI*2); pctx.fill();
+      }
+      const flip = document.getElementById('flipPleiades').checked ? -1 : 1;
+      const ox = pc.width*0.5, oy = pc.height*0.5, scale = Math.min(pc.width, pc.height)*0.65;
+      starsState.forEach(st=>{
+        const sx = ox + flip*(st.x-0.5)*scale;
+        const sy = oy + (st.y-0.5)*scale;
+        if(st.goat){
+          drawGoat(sx, sy, 0.9);
+        }else{
+          drawStar(sx, sy, 3.5);
+        }
+      });
+    }
+    renderPleiades();
+
+    pc.addEventListener('click', (e)=>{
+      const rect = pc.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const flip = document.getElementById('flipPleiades').checked ? -1 : 1;
+      const ox = pc.width*0.5, oy = pc.height*0.5, scale = Math.min(pc.width, pc.height)*0.65;
+
+      // Find nearest star within a small radius and toggle to goat
+      let hitIndex = -1; let bestD2 = 14*14;
+      starsState.forEach((st, i)=>{
+        const sx = ox + flip*(st.x-0.5)*scale;
+        const sy = oy + (st.y-0.5)*scale;
+        const d2 = (mx-sx)*(mx-sx) + (my-sy)*(my-sy);
+        if(d2 < bestD2){ bestD2 = d2; hitIndex = i; }
+      });
+      if(hitIndex >= 0){
+        starsState[hitIndex].goat = !starsState[hitIndex].goat;
+        renderPleiades();
+      }
+    });
+
+    document.getElementById('flipPleiades').addEventListener('change', renderPleiades);
+    document.getElementById('resetGoats').addEventListener('click', ()=>{
+      starsState = baseStars.map(s=>({ ...s, goat:false }));
+      renderPleiades();
+    });
+
+    /* -------- AGN visualization: orange accretion flow, black hole, photon ring -------- */
+    const agn = document.getElementById('agn-canvas');
+    const actx = agn.getContext('2d');
+
+    function drawAGN(t){
+      const w = agn.width, h = agn.height;
+      actx.clearRect(0,0,w,h);
+
+      const cx = w/2, cy = h/2;
+      const rBH = Math.min(w,h)*0.10;       // event horizon radius
+      const rRing = rBH*1.6;                // photon ring radius
+      const rDiskOuter = Math.min(w,h)*0.40;
+      const rDiskInner = rRing*1.05;
+
+      // Accretion disk (thick torus, orange hues). Simulate rotation by angular offset.
+      const rot = t*0.0012; // slow drift
+      const gradSteps = 140;
+      for(let i=gradSteps; i>0; i--){
+        const f = i/gradSteps;              // 0..1
+        const r = rDiskInner + f*(rDiskOuter - rDiskInner);
+        const alpha = 0.85 * (1 - f*f);
+        // Doppler beaming: brighten right side, dim left
+        for(let a=0; a<360; a+=2){
+          const ang = (a*Math.PI/180) + rot;
+          const x = cx + Math.cos(ang)*r;
+          const y = cy + Math.sin(ang)*(r*0.55); // foreshortened vertically for a tilted disk
+
+          // Beaming factor: cos(ang) maps approaching/receding sides
+          const beam = 0.5 + 0.5*Math.max(0, Math.cos(ang));
+          const R = Math.floor(230 * (0.75 + 0.25*beam));   // 173..230
+          const G = Math.floor(120 * (0.65 + 0.35*beam));   // 78..120
+          const B = Math.floor(30  * (0.55 + 0.45*beam));   // 16..30
+
+          actx.fillStyle = `rgba(${R},${G},${B},${alpha})`;
+          actx.fillRect(x, y, 2, 2);
+        }
+      }
+
+      // Photon ring (thin bright ring)
+      actx.strokeStyle = 'rgba(255,160,60,0.9)';
+      actx.lineWidth = 2.2;
+      actx.beginPath();
+      actx.ellipse(cx, cy, rRing, rRing*0.55, 0, 0, Math.PI*2);
+      actx.stroke();
+
+      // Event horizon (black)
+      actx.fillStyle = '#000000';
+      actx.beginPath();
+      actx.arc(cx, cy, rBH, 0, Math.PI*2);
+      actx.fill();
+
+      // Subtle vertical jets
+      actx.strokeStyle = 'rgba(255,180,90,0.25)';
+      actx.lineWidth = 1.5;
+      actx.beginPath();
+      actx.moveTo(cx, cy - rBH - 6);
+      actx.lineTo(cx, cy - rBH - 80);
+      actx.moveTo(cx, cy + rBH + 6);
+      actx.lineTo(cx, cy + rBH + 80);
+      actx.stroke();
+    }
+
+    let lastT = 0;
+    function animAGN(ts){
+      drawAGN(ts);
+      lastT = ts;
+      requestAnimationFrame(animAGN);
+    }
+    requestAnimationFrame(animAGN);
+  </script>
+</body>
+</html>
