@@ -14,6 +14,34 @@
     /* Background stars */
     #cosmic-canvas{ position:fixed; inset:0; z-index:-1; opacity:.3; }
 
+    /* Cursor trail */
+    .cursor-trail{
+      position:fixed;
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(102,126,234,0.8), transparent);
+      pointer-events:none;
+      z-index:9999;
+      transform:translate(-50%, -50%);
+    }
+
+    /* Floating particles */
+    .particle{
+      position:fixed;
+      width:3px;
+      height:3px;
+      background:rgba(255,255,255,0.6);
+      border-radius:50%;
+      animation:float 20s infinite;
+      z-index:-1;
+    }
+    @keyframes float{
+      0%, 100%{ transform:translateY(100vh) rotate(0deg); opacity:0; }
+      10%, 90%{ opacity:1; }
+      50%{ transform:translateY(-20vh) translateX(100px) rotate(360deg); }
+    }
+
     /* Navigation */
     nav{ position:fixed; top:0; width:100%; padding:20px 50px; background:rgba(10,10,10,.85); backdrop-filter: blur(10px); z-index:1000; transition:.3s; }
     nav.scrolled{ padding:15px 50px; background:rgba(10,10,10,.95); }
@@ -22,14 +50,53 @@
     .nav-links a::after{ content:''; position:absolute; bottom:-5px; left:0; width:0; height:1px; background:linear-gradient(90deg,#ff6b6b,#4ecdc4); transition:width .3s; }
     .nav-links a:hover::after{ width:100%; }
 
-    /* Hero */
-    .hero{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:80px 50px; position:relative; }
-    .hero-content{ max-width:900px; text-align:center; animation:fadeInUp 1s ease; }
+    /* Hero with background */
+    .hero{ 
+      min-height:100vh; 
+      display:flex; 
+      align-items:center; 
+      justify-content:center; 
+      padding:80px 50px; 
+      position:relative;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0a0a1a 100%);
+    }
+    .hero::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background: radial-gradient(ellipse at center, rgba(102,126,234,0.1) 0%, transparent 70%);
+      z-index:0;
+    }
+    .hero-content{ 
+      max-width:1100px; 
+      position:relative;
+      z-index:1;
+      animation:fadeInUp 1s ease; 
+    }
+    .hero-layout{
+      display:flex;
+      align-items:center;
+      gap:40px;
+    }
+    .hero-photo{
+      width:180px;
+      height:180px;
+      border-radius:50%;
+      object-fit:cover;
+      border:3px solid rgba(102,126,234,.5);
+      flex-shrink:0;
+      box-shadow: 0 8px 32px rgba(102,126,234,.3);
+    }
+    .hero-text{
+      flex:1;
+      text-align:left;
+    }
+    
     @keyframes fadeInUp{ from{ opacity:0; transform:translateY(30px);} to{opacity:1; transform:translateY(0);} }
     h1{ font-size:clamp(2.5rem,8vw,5rem); font-weight:300; margin-bottom:20px;
         background:linear-gradient(135deg,#667eea 0%, #764ba2 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-2px; }
     .tagline{ font-size:1.5rem; color:#a0a0a0; margin-bottom:40px; font-weight:300; }
-    .intro-text{ font-size:1.05rem; line-height:1.8; color:#c0c0c0; max-width:700px; margin:0 auto; }
+    .intro-text{ font-size:1.05rem; line-height:1.8; color:#c0c0c0; max-width:700px; }
 
     /* Summary box */
     .summary-box{ background:linear-gradient(135deg, rgba(102,126,234,.08), rgba(118,75,162,.08));
@@ -41,7 +108,6 @@
     section{ padding:100px 50px; max-width:1200px; margin:0 auto; }
     h2{ font-size:2.2rem; margin-bottom:24px; font-weight:300; position:relative; display:inline-block; }
     h2 + p.section-lead{ color:#b0b0b0; margin-bottom:34px; }
-
     h2::after{ content:''; position:absolute; bottom:-10px; left:0; width:60px; height:2px; background:linear-gradient(90deg,#ff6b6b,#4ecdc4); }
 
     /* Dual thesis */
@@ -50,11 +116,9 @@
     .thesis-card h3{ color:#667eea; margin-bottom:8px; font-size:1.3rem; }
     .thesis-excerpt{ background:rgba(0,0,0,.3); padding:16px; border-left:3px solid #4ecdc4; margin:16px 0; font-style:italic; color:#c0c0c0; border-radius:5px; }
 
-    /* Research grid */
+    /* Research grid - removed hover line */
     .research-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(350px,1fr)); gap:30px; margin-top:20px; }
     .research-card{ background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.1); border-radius:15px; padding:24px; transition:.25s; position:relative; }
-    .research-card::before{ content:''; position:absolute; top:0; left:0; width:100%; height:3px; background:linear-gradient(90deg,#667eea,#764ba2); transform:translateX(-100%); transition:transform .25s; }
-    .research-card:hover::before{ transform:translateX(0); }
     .research-card:hover{ transform:translateY(-4px); background:rgba(255,255,255,.05); box-shadow:0 16px 36px rgba(0,0,0,.28); }
     .research-card h3{ font-size:1.2rem; margin-bottom:10px; color:#f0f0f0; }
     .research-card p{ color:#b0b0b0; margin-bottom:16px; }
@@ -78,8 +142,17 @@
     .skill-category h4{ color:#667eea; margin-bottom:10px; font-size:1.05rem; }
     .skill-category li{ list-style:none; color:#c0c0c0; margin-bottom:5px; font-size:.92rem; }
 
-    /* Future */
+    /* Future - centered h2 */
     .vision-section{ background:linear-gradient(135deg, rgba(255,107,107,.05), rgba(78,205,196,.05)); border-radius:20px; padding:40px; margin:60px 0; }
+    .vision-section .vision-content h2{
+      display:block;
+      text-align:center;
+      width:100%;
+    }
+    .vision-section .vision-content h2::after{
+      left:50%;
+      transform:translateX(-50%);
+    }
     .research-interests{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:16px; }
     .interest-area{ padding:18px; background:rgba(255,255,255,.03); border-radius:10px; }
     .interest-area h4{ color:#ff6b6b; margin-bottom:8px; }
@@ -127,6 +200,9 @@
       nav{ padding:15px 20px; }
       .nav-links{ gap:15px; }
       section{ padding:60px 20px; }
+      .hero-layout{ flex-direction:column; text-align:center; }
+      .hero-text{ text-align:center; }
+      .intro-text{ margin:0 auto; }
       .summary-grid{ grid-template-columns:1fr; }
       .thesis-container{ grid-template-columns:1fr; }
       .research-grid{ grid-template-columns:1fr; }
@@ -159,11 +235,16 @@
   <!-- Hero -->
   <section class="hero" id="home">
     <div class="hero-content">
-      <h1>Valeria Lopez</h1>
-      <p class="tagline">Tracing feedback loops from Honduras to the cosmos</p>
-      <p class="intro-text">
-        Before I learned to model supermassive black holes, I was naming constellations with my family under rural Honduran skies near Blanca Jeannette Kawas National Park in San Alejo, Tela. We called the Pleiades “Las Siete Cabritas.”
-      </p>
+      <div class="hero-layout">
+        <img src="assets/img/valeria-headshot.jpg" alt="Valeria Lopez" class="hero-photo">
+        <div class="hero-text">
+          <h1>Valeria Lopez</h1>
+          <p class="tagline">Tracing feedback loops from Honduras to the cosmos</p>
+          <p class="intro-text">
+            Before I learned to model supermassive black holes, I was naming constellations with my family under rural Honduran skies near Blanca Jeannette Kawas National Park in San Alejo, Tela. We called the Pleiades "Las Siete Cabritas."
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -207,7 +288,7 @@
         </div>
       </div>
       <div style="text-align:center;">
-        <a href="#" class="cv-button">Download full CV (PDF)</a>
+        <a href="#experience" class="cv-button">View full experience</a>
       </div>
     </div>
   </section>
@@ -227,7 +308,7 @@
           <strong>Advisor:</strong> Dr. Anne Jaskot
         </p>
         <div class="thesis-excerpt">
-          “Ancient photons cross large distances to reach us. What we see depends on how freely light can move through gas.”
+          "Ancient photons cross large distances to reach us. What we see depends on how freely light can move through gas."
         </div>
         <p style="color:#b0b0b0;">
           I use JWST spectroscopy of nearby low-metallicity galaxies to study line ratios that carry information about the hardness of ionizing radiation. The goal is to connect spectra to escape of ionizing light.
@@ -241,7 +322,7 @@
           <strong>Advisor:</strong> Dr. Ezra Feldman
         </p>
         <div class="thesis-excerpt">
-          “Airflow is not background. It is made by fans, filters, and people who tune them.”
+          "Airflow is not background. It is made by fans, filters, and people who tune them."
         </div>
         <p style="color:#b0b0b0;">
           I write about maintenance and care in closed environments. I look at how procedures, interfaces, and habits keep bodies comfortable and safe in orbit.
@@ -260,7 +341,7 @@
       <div class="viz-card">
         <h4>Las Siete Cabritas (Pleiades)</h4>
         <p style="color:#b0b0b0; margin-bottom:8px;">
-          Orientation matches common sky charts. Toggle “Flip” if your reference uses the mirrored view.
+          Orientation matches common sky charts. Toggle "Flip" if your reference uses the mirrored view.
         </p>
         <div style="display:flex; gap:10px; align-items:center; margin-bottom:8px;">
           <label style="font-size:.9rem; color:#c0c0c0;"><input type="checkbox" id="flipPleiades" /> Flip</label>
@@ -348,7 +429,7 @@
       </div>
       <ul class="experience-details">
         <li>Built web tools for real-time telescope pointing and spectra</li>
-        <li>Contributed to PASA manuscript “Hot Jupiter – Cold Jupiter: A Complex Sibling Relation”</li>
+        <li>Contributed to PASA manuscript "Hot Jupiter – Cold Jupiter: A Complex Sibling Relation"</li>
       </ul>
     </div>
 
@@ -616,26 +697,26 @@
     <h2>Publications and talks</h2>
     <ul class="publications">
       <li>
-        <strong>First author:</strong> “Characterizing AGN Emission Line Profiles through DESI Spectroscopy” —
+        <strong>First author:</strong> "Characterizing AGN Emission Line Profiles through DESI Spectroscopy" —
         <a href="https://ui.adsabs.harvard.edu/abs/2025AAS...24535509L/abstract" target="_blank" style="color:#4ecdc4;">AAS 2025</a>
       </li>
       <li>
-        <strong>First author:</strong> “Automated Telemetry Analysis for Self-Assembling Space Architecture” —
+        <strong>First author:</strong> "Automated Telemetry Analysis for Self-Assembling Space Architecture" —
         <a href="https://drive.google.com/file/d/15XKWieIpFxSj1lLWEHOvdJejL5IDRhFg/view" target="_blank" style="color:#4ecdc4;">KNAC 2025</a>
       </li>
       <li>
-        <strong>Policy analysis:</strong> “Postcolonial Techno-Futurism: Telescopes on Sacred Lands” —
+        <strong>Policy analysis:</strong> "Postcolonial Techno-Futurism: Telescopes on Sacred Lands" —
         <a href="https://doi.org/10.38105/spr.dikhouy3qw" target="_blank" style="color:#4ecdc4;">MIT Science Policy Review</a>
       </li>
       <li>
-        <strong>First author:</strong> “Conquest and the Cosmos: Traces of Colonialism in Ground-Based Astronomy” —
+        <strong>First author:</strong> "Conquest and the Cosmos: Traces of Colonialism in Ground-Based Astronomy" —
         <a href="https://ui.adsabs.harvard.edu/abs/2024AAS...24316304L/abstract" target="_blank" style="color:#4ecdc4;">AAS 243, HAD Session</a>
       </li>
       <li>
-        <strong>In preparation:</strong> “Hot Jupiter – Cold Jupiter: A Complex Sibling Relation” — PASA manuscript
+        <strong>In preparation:</strong> "Hot Jupiter – Cold Jupiter: A Complex Sibling Relation" — PASA manuscript
       </li>
       <li>
-        <strong>Conference talk:</strong> “Spectral Signatures and Galactic Outflows” — KNAC 2024
+        <strong>Conference talk:</strong> "Spectral Signatures and Galactic Outflows" — KNAC 2024
       </li>
     </ul>
   </section>
@@ -650,11 +731,11 @@
       </div>
       <div class="award-item">
         <strong>Gordon Davis Fellow</strong><br/>
-        Williams College fellowship that funds projects with social impact. Supported my work on “Speculative Sleep Systems” for space habitats.
+        Williams College fellowship that funds projects with social impact. Supported my work on "Speculative Sleep Systems" for space habitats.
       </div>
       <div class="award-item">
         <strong>Gaudino Fellow</strong><br/>
-        Williams College’s experiential learning fellowship. I wrote children’s astronomy books during a winter study in the Sahara and shared them in local schools.
+        Williams College's experiential learning fellowship. I wrote children's astronomy books during a winter study in the Sahara and shared them in local schools.
       </div>
       <div class="award-item">
         <strong>NAC Scholar</strong><br/>
@@ -734,6 +815,52 @@
     }
     animBG();
 
+    /* Glowing cursor trail */
+    const trail = [];
+    const trailLength = 20;
+
+    for(let i=0; i<trailLength; i++){
+      const dot = document.createElement('div');
+      dot.className = 'cursor-trail';
+      document.body.appendChild(dot);
+      trail.push({el:dot, x:0, y:0});
+    }
+
+    let mouseX = 0, mouseY = 0;
+
+    document.addEventListener('mousemove', (e)=>{
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function animateTrail(){
+      let x = mouseX, y = mouseY;
+      
+      trail.forEach((dot, i)=>{
+        dot.el.style.left = x + 'px';
+        dot.el.style.top = y + 'px';
+        
+        const nextDot = trail[i+1] || trail[0];
+        dot.x = x;
+        dot.y = y;
+        x += (nextDot.x - x) * 0.3;
+        y += (nextDot.y - y) * 0.3;
+      });
+      
+      requestAnimationFrame(animateTrail);
+    }
+    animateTrail();
+
+    /* Floating particles */
+    for(let i=0; i<30; i++){
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random()*100 + '%';
+      p.style.animationDelay = Math.random()*10 + 's';
+      p.style.animationDuration = (15 + Math.random()*10) + 's';
+      document.body.appendChild(p);
+    }
+
     /* Intersection fade-in */
     const obs = new IntersectionObserver(entries=>{
       entries.forEach(e=>{ if(e.isIntersecting){ e.target.style.animation='fadeInUp .8s ease forwards'; }});
@@ -744,8 +871,6 @@
     const pc = document.getElementById('pleiades-canvas');
     const pctx = pc.getContext('2d');
 
-    // Approximate Pleiades (normalized); oriented to match common charts
-    // (Alcyone, Maia, Merope, Electra, Taygeta, Pleione, Atlas)
     const baseStars = [
       {name:'Alcyone', x:0.50, y:0.48},
       {name:'Maia',    x:0.38, y:0.36},
@@ -767,7 +892,6 @@
       pctx.restore();
     }
 
-    // Simple goat silhouette (tiny): body, head, legs, horns
     function drawGoat(cx, cy, scale=1){
       pctx.save();
       pctx.translate(cx, cy);
@@ -775,50 +899,37 @@
       pctx.fillStyle = '#e5e5e5';
       pctx.strokeStyle = '#cfcfcf';
       pctx.lineWidth = 1.2;
-
-      // Body
       pctx.beginPath();
       pctx.ellipse(0, 0, 9, 6, 0, 0, Math.PI*2);
       pctx.fill();
-
-      // Head
       pctx.beginPath();
       pctx.ellipse(11, -4, 4, 3, 0, 0, Math.PI*2);
       pctx.fill();
-
-      // Horns
       pctx.beginPath();
       pctx.moveTo(12, -7);
       pctx.lineTo(15, -12);
       pctx.lineTo(13, -7);
       pctx.closePath(); pctx.fill();
-
       pctx.beginPath();
       pctx.moveTo(10, -7);
       pctx.lineTo(7, -12);
       pctx.lineTo(9, -7);
       pctx.closePath(); pctx.fill();
-
-      // Tail
       pctx.beginPath();
       pctx.moveTo(-10, -1);
       pctx.lineTo(-14, -5);
       pctx.stroke();
-
-      // Legs
       pctx.beginPath();
       pctx.moveTo(-4, 6); pctx.lineTo(-4, 11);
       pctx.moveTo(0, 6);  pctx.lineTo(0, 11);
       pctx.moveTo(4, 6);  pctx.lineTo(4, 11);
       pctx.moveTo(8, 6);  pctx.lineTo(8, 11);
       pctx.stroke();
-
       pctx.restore();
     }
 
     function renderPleiades(){
       pctx.clearRect(0,0,pc.width,pc.height);
-      // background sprinkle
       pctx.fillStyle = 'rgba(255,255,255,0.05)';
       for(let i=0;i<80;i++){
         const x = Math.random()*pc.width, y = Math.random()*pc.height, r = Math.random()*1.2;
@@ -829,11 +940,7 @@
       starsState.forEach(st=>{
         const sx = ox + flip*(st.x-0.5)*scale;
         const sy = oy + (st.y-0.5)*scale;
-        if(st.goat){
-          drawGoat(sx, sy, 0.9);
-        }else{
-          drawStar(sx, sy, 3.5);
-        }
+        st.goat ? drawGoat(sx, sy, 0.9) : drawStar(sx, sy, 3.5);
       });
     }
     renderPleiades();
@@ -844,8 +951,6 @@
       const my = e.clientY - rect.top;
       const flip = document.getElementById('flipPleiades').checked ? -1 : 1;
       const ox = pc.width*0.5, oy = pc.height*0.5, scale = Math.min(pc.width, pc.height)*0.65;
-
-      // Find nearest star within a small radius and toggle to goat
       let hitIndex = -1; let bestD2 = 14*14;
       starsState.forEach((st, i)=>{
         const sx = ox + flip*(st.x-0.5)*scale;
@@ -865,58 +970,45 @@
       renderPleiades();
     });
 
-    /* -------- AGN visualization: orange accretion flow, black hole, photon ring -------- */
+    /* -------- AGN visualization -------- */
     const agn = document.getElementById('agn-canvas');
     const actx = agn.getContext('2d');
 
     function drawAGN(t){
       const w = agn.width, h = agn.height;
       actx.clearRect(0,0,w,h);
-
       const cx = w/2, cy = h/2;
-      const rBH = Math.min(w,h)*0.10;       // event horizon radius
-      const rRing = rBH*1.6;                // photon ring radius
+      const rBH = Math.min(w,h)*0.10;
+      const rRing = rBH*1.6;
       const rDiskOuter = Math.min(w,h)*0.40;
       const rDiskInner = rRing*1.05;
-
-      // Accretion disk (thick torus, orange hues). Simulate rotation by angular offset.
-      const rot = t*0.0012; // slow drift
+      const rot = t*0.0012;
       const gradSteps = 140;
       for(let i=gradSteps; i>0; i--){
-        const f = i/gradSteps;              // 0..1
+        const f = i/gradSteps;
         const r = rDiskInner + f*(rDiskOuter - rDiskInner);
         const alpha = 0.85 * (1 - f*f);
-        // Doppler beaming: brighten right side, dim left
         for(let a=0; a<360; a+=2){
           const ang = (a*Math.PI/180) + rot;
           const x = cx + Math.cos(ang)*r;
-          const y = cy + Math.sin(ang)*(r*0.55); // foreshortened vertically for a tilted disk
-
-          // Beaming factor: cos(ang) maps approaching/receding sides
+          const y = cy + Math.sin(ang)*(r*0.55);
           const beam = 0.5 + 0.5*Math.max(0, Math.cos(ang));
-          const R = Math.floor(230 * (0.75 + 0.25*beam));   // 173..230
-          const G = Math.floor(120 * (0.65 + 0.35*beam));   // 78..120
-          const B = Math.floor(30  * (0.55 + 0.45*beam));   // 16..30
-
+          const R = Math.floor(230 * (0.75 + 0.25*beam));
+          const G = Math.floor(120 * (0.65 + 0.35*beam));
+          const B = Math.floor(30  * (0.55 + 0.45*beam));
           actx.fillStyle = `rgba(${R},${G},${B},${alpha})`;
           actx.fillRect(x, y, 2, 2);
         }
       }
-
-      // Photon ring (thin bright ring)
       actx.strokeStyle = 'rgba(255,160,60,0.9)';
       actx.lineWidth = 2.2;
       actx.beginPath();
       actx.ellipse(cx, cy, rRing, rRing*0.55, 0, 0, Math.PI*2);
       actx.stroke();
-
-      // Event horizon (black)
       actx.fillStyle = '#000000';
       actx.beginPath();
       actx.arc(cx, cy, rBH, 0, Math.PI*2);
       actx.fill();
-
-      // Subtle vertical jets
       actx.strokeStyle = 'rgba(255,180,90,0.25)';
       actx.lineWidth = 1.5;
       actx.beginPath();
@@ -927,14 +1019,11 @@
       actx.stroke();
     }
 
-    let lastT = 0;
     function animAGN(ts){
       drawAGN(ts);
-      lastT = ts;
       requestAnimationFrame(animAGN);
     }
     requestAnimationFrame(animAGN);
   </script>
 </body>
 </html>
-
